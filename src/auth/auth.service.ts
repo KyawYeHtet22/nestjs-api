@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IUser } from '../user/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+import { AuthDto } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,10 +17,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(
-    createUserDto: CreateUserDto,
-  ): Promise<{ access_token: string }> {
-    const { username, password } = createUserDto;
+  async signUp(authDto: AuthDto): Promise<{ access_token: string }> {
+    const { username, password } = authDto;
     const existingUser = await this.userModel.findOne({ username });
     if (existingUser) {
       throw new ConflictException('Username already in use');
@@ -35,10 +33,8 @@ export class AuthService {
     return { access_token };
   }
 
-  async signIn(
-    createUserDto: CreateUserDto,
-  ): Promise<{ access_token: string }> {
-    const { username, password } = createUserDto;
+  async signIn(authDto: AuthDto): Promise<{ access_token: string }> {
+    const { username, password } = authDto;
     const user = await this.userModel.findOne({ username });
     if (!user) {
       throw new UnauthorizedException();

@@ -1,18 +1,28 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+import { AuthDto } from './dto/auth.dto';
+import { ResponseAuthDto } from './dto/response-auth.dto';
+import { ErrorResponseDto } from 'src/commmon/dto/common.dto';
 
+@ApiTags('Auth')
 @Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('signup')
-  async signUp(@Body() createUserDto: CreateUserDto) {
-    return this.authService.signUp(createUserDto);
+  @ApiOperation({ summary: 'Sign up a new user' })
+  @ApiResponse({ status: 201, type: ResponseAuthDto })
+  @ApiResponse({ status: 409, type: ErrorResponseDto })
+  async signUp(@Body() authDto: AuthDto): Promise<ResponseAuthDto> {
+    return this.authService.signUp(authDto);
   }
 
   @Post('signin')
-  async signIn(@Body() createUserDto: CreateUserDto) {
-    return this.authService.signIn(createUserDto);
+  @ApiOperation({ summary: 'Sign in an existing user' })
+  @ApiResponse({ status: 200, type: ResponseAuthDto })
+  @ApiResponse({ status: 401, type: ErrorResponseDto })
+  async signIn(@Body() authDto: AuthDto): Promise<ResponseAuthDto> {
+    return this.authService.signIn(authDto);
   }
 }
