@@ -21,7 +21,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import { ResponseBookDto } from './dto/response-book.dto';
-import { ErrorResponseDto } from 'src/commmon/dto/common.dto';
+import { ErrorResponseDto } from '../common/dto/common.dto';
 
 @ApiTags('Books')
 @ApiHeader({ name: 'Authorization' })
