@@ -3,7 +3,8 @@ import { BookService } from './book.service';
 import { BookSchema, Category } from './schemas/book.schema';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongooseModule } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
+import { NotFoundException } from '@nestjs/common';
 
 describe('BookService', () => {
   let service: BookService;
@@ -58,6 +59,11 @@ describe('BookService', () => {
     it('should get a book', async () => {
       const book = await service.findOne(bookId);
       expect(book).toMatchObject(bookDto);
+    });
+
+    it('should throw an error when a book is not found', async () => {
+      const invalidId = new Types.ObjectId().toHexString();
+      expect(service.findOne(invalidId)).rejects.toThrow(NotFoundException);
     });
 
     it('should update a book', async () => {

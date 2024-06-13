@@ -37,11 +37,11 @@ export class AuthService {
     const { username, password } = authDto;
     const user = await this.userModel.findOne({ username });
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid credentials');
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid credentials');
     }
     const payload = { sub: user._id, username: user.username };
     return {
