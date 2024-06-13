@@ -61,11 +61,6 @@ describe('BookService', () => {
       expect(book).toMatchObject(bookDto);
     });
 
-    it('should throw an error when a book is not found', async () => {
-      const invalidId = new Types.ObjectId().toHexString();
-      expect(service.findOne(invalidId)).rejects.toThrow(NotFoundException);
-    });
-
     it('should update a book', async () => {
       const updateBookDto = {
         title: 'Updated Book',
@@ -81,6 +76,10 @@ describe('BookService', () => {
     it('should delete a book', async () => {
       const deletedBook = await service.remove(bookId);
       expect(deletedBook).toMatchObject(updatedBookDto);
+    });
+
+    it('should throw an error when a book is not found', async () => {
+      await expect(service.findOne(bookId)).rejects.toThrow(NotFoundException);
     });
   });
 });

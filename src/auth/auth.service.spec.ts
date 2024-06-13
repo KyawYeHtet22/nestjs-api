@@ -59,7 +59,7 @@ describe('AuthService', () => {
     });
 
     it('should throw a ConflictException when a user tries to sign up with a username that already exists', async () => {
-      expect(service.signUp(authDto)).rejects.toThrow(ConflictException);
+      await expect(service.signUp(authDto)).rejects.toThrow(ConflictException);
     });
 
     it('should authenticate a user and return a bearer token', async () => {
@@ -72,7 +72,7 @@ describe('AuthService', () => {
         username: 'Incorrect User',
         password: 'Incorrect Password',
       };
-      expect(service.signIn(incorrectAuthDto)).rejects.toThrow(
+      await expect(service.signIn(incorrectAuthDto)).rejects.toThrow(
         UnauthorizedException,
       );
     });
